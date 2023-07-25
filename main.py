@@ -1,12 +1,16 @@
 
 import logging
 from google.cloud import bigquery
+import os
 
-service_account_info = json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
-credentials = service_account.Credentials.from_service_account_info(service_account_info)
-client = bigquery.Client(credentials=credentials, project=service_account_info['github-action-393418'])
+
 # Construct a BigQuery client object.
-client = bigquery.Client()
+#client = bigquery.Client()
+credentials = service_account.Credentials.from_service_account_info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+client = bigquery.Client(
+    credentials=credentials,
+    project=credentials.project_id,
+)
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
