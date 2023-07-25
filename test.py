@@ -1,8 +1,15 @@
 import os
+import json
 
-# Get the list of environment variables
-env_vars = os.environ
 
-# Print each environment variable
-for key, value in env_vars.items():
-    print(f'{key}: {value}')
+print(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+f = open(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+# returns JSON object as 
+# a dictionary
+data = json.load(f)
+  
+# Iterating through the json
+# list
+for i in data['emp_details']:
+    print(i)
+
