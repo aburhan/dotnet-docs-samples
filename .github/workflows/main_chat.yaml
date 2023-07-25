@@ -48,6 +48,4 @@ jobs:
       run: pip install google-cloud-bigquery
 
     - name: Run script
-      env:
-        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: python main-chat.py
