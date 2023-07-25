@@ -40,16 +40,17 @@ jobs:
         token_format: access_token
         workload_identity_provider: projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
         service_account: github-actions-workflow@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
-    
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10' 
-    - run: |
-        pip install google-cloud-bigquery
-        python main.py
+     
+    - name: "Say Hello Mona it's Monday"
+      run: echo $GOOGLE_APPLICATION_CREDENTIALS 
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.access_token }} 
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.access_token }}   
+   # - name: Checkout code
+    #  uses: actions/checkout@v2
+
+    # - name: Set up Python
+     # uses: actions/setup-python@v4
+      # with:
+        # python-version: '3.10' 
+    # - run:  pip install google-cloud-bigquery python main.py
+      
