@@ -1,8 +1,9 @@
-
-import logging
-from google.cloud import bigquery
-from google.oauth2 import service_account
 import os
+import subprocess
+from ghapi.all import GhApi
+from google.cloud import bigquery
+from yaml import safe_load, safe_dump
+
 
 
 # Construct a BigQuery client object.
