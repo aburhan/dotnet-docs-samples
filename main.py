@@ -8,10 +8,8 @@ client = bigquery.Client()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-query = """
-    SELECT *
-    FROM `github-action-393418.test.test`
-"""
+query = f"SELECT * FROM `github-action-393418.test.test`"
+
 query_job = client.query(query)  # Make an API request.
 
 for row in query_job:
