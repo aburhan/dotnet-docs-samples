@@ -10,7 +10,7 @@ import os
 credentials = service_account.Credentials.from_service_account_info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
 client = bigquery.Client(
     credentials=credentials,
-    project=credentials.project_id,
+    project='github-action-393418',
 )
 
 logger = logging.getLogger(__name__)
