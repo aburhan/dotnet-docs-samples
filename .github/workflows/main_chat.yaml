@@ -42,7 +42,8 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v1'
 
     - name: 'Use gcloud CLI'
-      run: 'gcloud info'
+      run: bq query --use_legacy_sql=false 'SELECT * FROM `github-action-393418.test.test`'
+
       
     #- name: Set up Python
     #  uses: actions/setup-python@v4
