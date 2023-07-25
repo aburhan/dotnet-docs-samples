@@ -53,6 +53,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install PyYAML google-cloud-bigquery pandas ghapi
         pip install -r requirements.txt
     
     - name: Run python program
