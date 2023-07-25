@@ -4,18 +4,38 @@ on:
   push:
     branches:
       - main
-
+env:
+  PROJECT_ID: github-action-393418
+  PROJECT_NUMBER: 168241442549
+  
 jobs:
-  run-script:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    #
+    # Authenticate to Google Cloud using workload identity federation
+    #
+    - id: 'auth'
+      name: 'Obtain access token by using workload identity federation'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        create_credentials_file: true
+        token_format: access_token
+        workload_identity_provider: projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
+        service_account: github-actions-workflow@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
+        
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.9
 
     - name: Install dependencies
       run: pip install google-cloud-bigquery
