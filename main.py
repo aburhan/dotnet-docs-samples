@@ -6,12 +6,7 @@ import os
 
 
 # Construct a BigQuery client object.
-#client = bigquery.Client()
-credentials = service_account.Credentials.from_service_account_info(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-client = bigquery.Client(
-    credentials=credentials,
-    project='github-action-393418',
-)
+client = bigquery.Client()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
