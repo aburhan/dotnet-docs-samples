@@ -42,5 +42,5 @@ jobs:
 
     - name: Run script
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
       run: python main-chat.py
