@@ -2,6 +2,9 @@
 import logging
 from google.cloud import bigquery
 
+service_account_info = json.loads(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+credentials = service_account.Credentials.from_service_account_info(service_account_info)
+client = bigquery.Client(credentials=credentials, project=service_account_info['github-action-393418'])
 # Construct a BigQuery client object.
 client = bigquery.Client()
 
