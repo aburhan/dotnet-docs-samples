@@ -1,12 +1,12 @@
-name: Fetch BigQuery Data
+name: Fetch BigQuery Data 2
 
 on:
   push:
     branches:
       - main
 env:
-  PROJECT_ID: github-action-393418
-  PROJECT_NUMBER: 168241442549
+  PROJECT_ID: 'github-action-393418'
+  PROJECT_NUMBER: '168241442549'
   
 jobs:
   build:
