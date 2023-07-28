@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-statefulset
+spec:
+  serviceName: "my-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      - name: redis-container
+        image: redis
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi

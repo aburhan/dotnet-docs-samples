@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: nginx-container
+            image: nginx
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+          - name: redis-container
+            image: redis
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+          restartPolicy: OnFailure
