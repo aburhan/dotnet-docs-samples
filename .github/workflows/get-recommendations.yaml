@@ -1,4 +1,4 @@
-name: Fetch BigQuery Data 2
+name: NEW
 
 on:
   workflow_dispatch:
