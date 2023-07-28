@@ -6,7 +6,7 @@ CPU_LIMITS="1Gi"
 MEMORY_LIMITS="500Mi"
 
 # Set the file path
-FILE="manifests/pod.yaml"
+FILE="pod.yaml"
 
 # Check if the file exists
 if [ ! -f "$FILE" ]; then
