@@ -25,9 +25,7 @@ jobs:
       with:
         run: ./manifests/test-jq.sh
         cmd: yq '.kind' "manifests/pod.yaml"
-      
-     
-    - run: yq '.kind' "manifests/pod.yaml"
+
     #
     # Authenticate to Google Cloud using workload identity federation
     #
