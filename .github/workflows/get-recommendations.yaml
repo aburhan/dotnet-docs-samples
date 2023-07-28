@@ -17,10 +17,13 @@ jobs:
     steps:
     # actions/checkout MUST come before auth
     - uses: 'actions/checkout@v3'
-
-    #- name: Set foobar to cool
-     # uses: mikefarah/yq@master
-    - run: ls 
+    - run: ls manifests
+    - name: Set foobar to cool
+      uses: mikefarah/yq@maste
+      with:
+        cmd: yq '.kind' "manifests/pod.yaml"
+      
+     
     - run: yq '.kind' "manifests/pod.yaml"
     #
     # Authenticate to Google Cloud using workload identity federation
