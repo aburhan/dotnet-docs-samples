@@ -20,11 +20,11 @@ jobs:
     
     
     
-    - name: Get K8 Kind
-      uses: 'mikefarah/yq@master'
-      with:
-        run: ./manifests/test-jq.sh
-        cmd: yq '.kind' "manifests/pod.yaml"
+    #- name: Get K8 Kind
+     # uses: 'mikefarah/yq@master'
+     # with:
+     #   run: ./manifests/test-jq.sh
+      #  cmd: yq '.kind' "manifests/pod.yaml"
 
     #
     # Authenticate to Google Cloud using workload identity federation
@@ -40,7 +40,41 @@ jobs:
       uses: 'google-github-actions/setup-gcloud@v1'
 
     - name: 'Use gcloud CLI'
-      run: bq query --use_legacy_sql=false 'SELECT * FROM `github-action-393418.test.test`'
+      run: |
+          gcloud config set project ${{ env.PROJECT_ID }}
+    
+    - name: 'Loop through files, perform BigQuery, and update yaml files'
+      run: |
+        shopt -s globstar nullglob
+        for file in ./manifests/*.yaml; do
+          cpu=$(yq e '.spec.template.spec.containers[0].resources.requests.cpu' "$file")
+          memory=$(yq e '.spec.template.spec.containers[0].resources.requests.memory' "$file")
+          echo "Existing CPU: $cpu, Memory: $memory"
+          
+          cpu_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
+          memory_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
+          
+          yq e -i ".spec.template.spec.containers[0].resources.requests.cpu = \"$cpu_new\"" "$file"
+          yq e -i ".spec.template.spec.containers[0].resources.requests.memory = \"$memory_new\"" "$file"
+        done
+    
+    - name: 'Create new branch, commit and push changes'
+      run: |
+        git config --global user.email "ameenah.burhan@gmail.com
+        git config --global user.name "GitHub Action"
+        git checkout -b updated-yaml-files
+        git add -A
+        git commit -m "Updated YAML files with new CPU and memory values"
+        git push origin updated-yaml-files
+
+    - name: 'Create Pull Request'
+      uses: 'peter-evans/create-pull-request@v3'
+      with:
+        title: 'Updated YAML files with new CPU and memory values'
+        body: 'This PR updates the CPU and memory values in all YAML files'
+        branch: 'updated-yaml-files'
+    #- name: 'Use gcloud CLI'
+     # run: bq query --use_legacy_sql=false 'SELECT * FROM `github-action-393418.test.test`'
 
       
     #- name: Set up Python
