@@ -58,6 +58,7 @@ jobs:
         git branch -a 
         git config --global user.email "ameenah.burhan@gmail.com"
         git config --global user.name "aburhan"
+        git branch -a 
         git checkout rightsize
     
     - name: Get K8 Kind
