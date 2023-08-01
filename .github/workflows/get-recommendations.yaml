@@ -44,7 +44,7 @@ jobs:
           gcloud config set project ${{ env.PROJECT_ID }}
     
     - name: 'TEST RESULT'
-      run: bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v'
+      run: bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation'
      
     - name: 'Loop through files, perform BigQuery, and update yaml files'
       run: |
@@ -54,14 +54,12 @@ jobs:
           memory=$(yq e '.spec.template.spec.containers[0].resources.requests.memory' "$file")
           echo "Existing CPU: $cpu, Memory: $memory"
           
-          cpu_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
+          cpu_new=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation')
           echo "********************"
           echo cpu_new
           echo "********************"
-          memory_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
           
           yq e -i ".spec.template.spec.containers[0].resources.requests.cpu = \"$cpu_new\"" "$file"
-          yq e -i ".spec.template.spec.containers[0].resources.requests.memory = \"$memory_new\"" "$file"
         done
     
     - name: 'Create new branch, commit and push changes'
