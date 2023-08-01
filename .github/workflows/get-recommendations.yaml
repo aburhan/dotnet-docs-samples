@@ -44,7 +44,15 @@ jobs:
        bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'
        export CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'| jq -r '.[0].cpu_requested_recommendation')
        echo $CPU
-       
+    
+    - name: Create Feature branch
+      uses: peterjgrainger/action-create-branch@v2.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        branch: 'feature-rightsize'
+        sha: '${{ github.event.pull_request.head.sha }}'
+        
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
       with: 
@@ -52,18 +60,10 @@ jobs:
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
          yq -i e '.spec.containers[0].resources.requests.cpu = "2"' manifests/pod.yaml
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
+    
 
-    - name: Create new branch and push
-      run: |
-         git config --global user.email "ameenah.burhan@gmail.com"
-         git config --global user.name "aburhan"
-         git checkout -b feature
-         git push --set-upstream origin feature
-         git add manifests/pod.yaml
-         git commit -m "added recommendations"
-         git push
          
-       # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
+     # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
     
     #cmd: yq '.kind' "manifests/pod.yaml"    
   
