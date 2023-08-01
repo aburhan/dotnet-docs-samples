@@ -59,7 +59,7 @@ jobs:
         git config --global user.email "ameenah.burhan@gmail.com"
         git config --global user.name "aburhan"
         git branch -a 
-        git checkout rightsize
+        git checkout -b rightsize
     
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
