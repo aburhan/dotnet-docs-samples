@@ -53,32 +53,45 @@ jobs:
       # branch: 'rightsize'
        #sha: '${{ github.event.pull_request.head.sha }}'
     
-    - name: Checkout the feature branch
-      run : |
-        git branch -a 
-        git config --global user.email "ameenah.burhan@gmail.com"
-        git config --global user.name "aburhan"
-        git branch -a 
-        git checkout -b rightsize
-        ls
-        cat manifests/pod.yaml
+    - uses: 'actions/checkout@v3'
+    - name: Commit files # transfer the new html files back into the repository
+      run: |
+        git config --local user.name "aburhan"
+        git add ./docs
+        git commit -m "Updating the repository GitHub html pages in the docs folder"
     
-    - name: Get K8 Kind
-      uses: 'mikefarah/yq@master'
-      with: 
-       cmd: |
-         yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
-         yq -i e '.spec.containers[0].resources.requests.cpu = "3"' manifests/pod.yaml
-         yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
+
+    #- name: Checkout the feature branch
+     # run : |
+      #  git branch -a 
+       # git config --global user.email "ameenah.burhan@gmail.com"
+        #git config --global user.name "aburhan"
+        #git branch -a 
+        #git checkout -b rightsize
+        #ls
+        #cat manifests/pod.yaml
     
-    - uses: actions/checkout@v3
-    - run: |
-          cat manifests/pod.yaml
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "generated"
-          git  --set-upstream origin rightsize
+    #- name: Get K8 Kind
+     # uses: 'mikefarah/yq@master'
+      #with: 
+       #cmd: |
+         #yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
+         #yq -i e '.spec.containers[0].resources.requests.cpu = "3"' manifests/pod.yaml
+         #yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
+    
+    #- uses: actions/checkout@v3
+    #- run: |
+     #     cat manifests/pod.yaml
+      #    git config user.name github-actions
+       #   git config user.email github-actions@github.com
+        #  git add .
+         # git commit -m "generated"
+          #git  --set-upstream origin rightsize
 
 
          
