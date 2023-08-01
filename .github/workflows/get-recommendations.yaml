@@ -54,17 +54,20 @@ jobs:
       uses: 'mikefarah/yq@master'
       with: 
        cmd: |
-        yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
+         yq eval -i '.spec.containers[0].resources.requests.cpu = "1"' manifests/pod.yaml
 
-    - uses: actions/checkout@v2
-    - uses: actions/update-file@v1
+       # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
       with:
-        path: README.md
-        text: This is a new README file.
-    - uses: actions/create-pull-request@v1
-      with:
-        title: Update README file
-        body: This pull request updates the README file. 
+        commit-message: Cloud - Update available list
+        title: Cloud - Update available list
+        body: Cloud - Update available list
+        base: main
+        labels: automated-pr, Clouds & Regions
+        branch: cloud-update-advanced-params
+        delete-branch: true
     #cmd: yq '.kind' "manifests/pod.yaml"    
   
     #- name: 'Create Pull Request'
