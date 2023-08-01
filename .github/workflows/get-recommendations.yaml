@@ -57,16 +57,7 @@ jobs:
         yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
 
     #cmd: yq '.kind' "manifests/pod.yaml"    
-    
-    - name: 'Create new branch, commit and push changes'
-      run: |
-        git config --global user.email "ameenah.burhan@gmail.com
-        git config --global user.name "GitHub Action"
-        git checkout -b updated-yaml-files
-        git add -A
-        git commit -m "Updated YAML files with new CPU and memory values"
-        git push origin updated-yaml-files
-
+  
     - name: 'Create Pull Request'
       uses: 'peter-evans/create-pull-request@v3'
       with:
