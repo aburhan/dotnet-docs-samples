@@ -45,13 +45,13 @@ jobs:
        export CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'| jq -r '.[0].cpu_requested_recommendation')
        echo $CPU
     
-    - name: Create feature branch
-      uses: peterjgrainger/action-create-branch@v2.2.0
-      env:
-       GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
-      with:
-       branch: 'rightsize'
-       sha: '${{ github.event.pull_request.head.sha }}'
+    #- name: Create feature branch
+     # uses: peterjgrainger/action-create-branch@v2.2.0
+      #env:
+       #GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
+      #with:
+      # branch: 'rightsize'
+       #sha: '${{ github.event.pull_request.head.sha }}'
     
     - name: Checkout the feature branch
       run : |
