@@ -69,6 +69,7 @@ jobs:
     
     - name: Push changes to the feature branch
       run: | 
+        git branch -a 
         git add .
         git commit -m "updated container size"
         git push 
