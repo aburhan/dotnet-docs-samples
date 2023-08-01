@@ -66,7 +66,7 @@ jobs:
       with: 
        cmd: |
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
-         yq -i e '.spec.containers[0].resources.requests.cpu = "2"' manifests/pod.yaml
+         yq -i e '.spec.containers[0].resources.requests.cpu = "3"' manifests/pod.yaml
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
     
     - uses: actions/checkout@v3
