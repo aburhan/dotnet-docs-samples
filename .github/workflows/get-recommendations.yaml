@@ -58,6 +58,7 @@ jobs:
          git config --global user.email "ameenah.burhan@gmail.com"
          git config --global user.name "aburhan"
          git checkout -b feature
+         git push --set-upstream origin feature
          git add manifests/pod.yaml
          git commit -m "added recommendations"
          git push
