@@ -50,7 +50,7 @@ jobs:
       #env:
        # GITHUB_TOKEN: ${{ secrets.MY_TOKEN}}
       with:
-        branch: 'feature-rightsize'
+        branch: 'rightsize'
         sha: '${{ github.event.pull_request.head.sha }}'
         
     - name: Get K8 Kind
