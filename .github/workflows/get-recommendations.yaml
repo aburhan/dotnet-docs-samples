@@ -44,14 +44,17 @@ jobs:
           gcloud config set project ${{ env.PROJECT_ID }}
     
     - name: 'Get workload recommendation'
+      id: bigquery
       run: |
           CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation')
           echo "::set-output name=cpu::$CPU"
   
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
-      with: |
-       cmd:yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.cpu }}"' deployment.yaml
+      with: 
+       cmd: |
+        yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' pod.yaml
+
     #cmd: yq '.kind' "manifests/pod.yaml"    
     
     - name: 'Create new branch, commit and push changes'
