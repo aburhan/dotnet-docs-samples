@@ -18,9 +18,6 @@ jobs:
     # actions/checkout MUST come before auth
     - uses: 'actions/checkout@v3'
 
-    
-    
-    
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
       with:
@@ -39,11 +36,8 @@ jobs:
         
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
-
-    #- name: 'Use gcloud CLI'
-      #run: |
-          #gcloud config set project ${{ env.PROJECT_ID }}
-    
+   
+        
     - name: 'Get workload recommendation'
       id: bigquery
       run: |
@@ -59,17 +53,15 @@ jobs:
          yq -i e '.spec.containers[0].resources.requests.cpu = "2"' manifests/pod.yaml
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
 
+    - name: Create new branch and push
+      run: |
+         git checkout -b feature
+         git add manifests/pod.yaml
+         git commit -m "added recommendations"
+         git push
+         
        # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
-
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v5
-      with:
-        token: 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
-        committer: aburhan <ameenah.burhan@gmail.com>
-        commit-message: Cloud - Update available list
-        title: Cloud - Update available list
-        body: Cloud - Update available list
-        base: main
+    
     #cmd: yq '.kind' "manifests/pod.yaml"    
   
     #- name: 'Create Pull Request'
