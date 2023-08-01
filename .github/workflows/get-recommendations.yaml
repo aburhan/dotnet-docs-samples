@@ -36,12 +36,12 @@ jobs:
         workload_identity_provider: projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/github-actions/providers/github-actions-oidc
         service_account: github-actions-workflow@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
         
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
+    #- name: 'Set up Cloud SDK'
+     # uses: 'google-github-actions/setup-gcloud@v1'
 
-    - name: 'Use gcloud CLI'
-      run: |
-          gcloud config set project ${{ env.PROJECT_ID }}
+    #- name: 'Use gcloud CLI'
+      #run: |
+          #gcloud config set project ${{ env.PROJECT_ID }}
     
     - name: 'Get workload recommendation'
       id: bigquery
