@@ -69,12 +69,14 @@ jobs:
          yq -i e '.spec.containers[0].resources.requests.cpu = "2"' manifests/pod.yaml
          yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
     
-    - name: Push changes to the feature branch
-      run: | 
-        git branch -a 
-        git add .
-        git commit -m "updated container size"
-        git push --set-upstream origin rightsize
+    - uses: actions/checkout@v3
+    - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "generated"
+          git  --set-upstream origin rightsize
+
 
          
      # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
