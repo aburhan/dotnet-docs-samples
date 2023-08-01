@@ -55,6 +55,7 @@ jobs:
     
     - name: Checkout the feature branch
       run : |
+        git branch -a 
         git config --global user.email "ameenah.burhan@gmail.com"
         git config --global user.name "aburhan"
         git checkout rightsize
