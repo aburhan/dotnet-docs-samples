@@ -54,7 +54,9 @@ jobs:
       uses: 'mikefarah/yq@master'
       with: 
        cmd: |
-         yq eval -i '.spec.containers[0].resources.requests.cpu = "1"' manifests/pod.yaml
+         yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
+         yq -i e '.spec.containers[0].resources.requests.cpu = "2"' manifests/pod.yaml
+         yq '.spec.containers[0].resources.requests.cpu' "manifests/pod.yaml"
 
        # yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.CPU }}"' manifests/pod.yaml
 
