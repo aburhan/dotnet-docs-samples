@@ -52,6 +52,9 @@ jobs:
           echo "Existing CPU: $cpu, Memory: $memory"
           
           cpu_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
+          echo "********************"
+          echo cpu_new
+          echo "********************"
           memory_new=$(bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v')
           
           yq e -i ".spec.template.spec.containers[0].resources.requests.cpu = \"$cpu_new\"" "$file"
