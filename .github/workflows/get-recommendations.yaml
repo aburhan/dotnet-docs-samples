@@ -20,11 +20,11 @@ jobs:
     
     
     
-    #- name: Get K8 Kind
-     # uses: 'mikefarah/yq@master'
-     # with:
-     #   run: ./manifests/test-jq.sh
-      #  cmd: yq '.kind' "manifests/pod.yaml"
+    - name: Get K8 Kind
+      uses: 'mikefarah/yq@master'
+      with:
+        run: ./manifests/test-jq.sh
+        cmd: yq '.kind' "manifests/pod.yaml"
 
     #
     # Authenticate to Google Cloud using workload identity federation
@@ -43,24 +43,16 @@ jobs:
       run: |
           gcloud config set project ${{ env.PROJECT_ID }}
     
-    - name: 'TEST RESULT'
-      run: bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation'
-     
-    - name: 'Loop through files, perform BigQuery, and update yaml files'
+    - name: 'Get workload recommendation'
       run: |
-        shopt -s globstar nullglob
-        for file in ./manifests/*.yaml; do
-          cpu=$(yq e '.spec.template.spec.containers[0].resources.requests.cpu' "$file")
-          memory=$(yq e '.spec.template.spec.containers[0].resources.requests.memory' "$file")
-          echo "Existing CPU: $cpu, Memory: $memory"
-          
-          cpu_new=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation')
-          echo "********************"
-          echo cpu_new
-          echo "********************"
-          
-          yq e -i ".spec.template.spec.containers[0].resources.requests.cpu = \"$cpu_new\"" "$file"
-        done
+          CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].cpu_requested_recommendation')
+          echo "::set-output name=cpu::$CPU"
+  
+    - name: Get K8 Kind
+      uses: 'mikefarah/yq@master'
+      with: |
+       cmd:yq eval -i '.spec.containers[0].resources.requests.cpu = "${{ steps.bigquery.outputs.cpu }}"' deployment.yaml
+    #cmd: yq '.kind' "manifests/pod.yaml"    
     
     - name: 'Create new branch, commit and push changes'
       run: |
