@@ -43,6 +43,9 @@ jobs:
       run: |
           gcloud config set project ${{ env.PROJECT_ID }}
     
+    - name: 'TEST RESULT'
+      run: bq query --nouse_legacy_sql --format=json 'SELECT cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1' | jq -r '.[0].f[0].v'
+     
     - name: 'Loop through files, perform BigQuery, and update yaml files'
       run: |
         shopt -s globstar nullglob
