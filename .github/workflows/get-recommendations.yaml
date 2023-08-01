@@ -17,6 +17,10 @@ jobs:
     steps:
     # actions/checkout MUST come before auth
     - uses: 'actions/checkout@v3'
+    - name: List all files
+      run: |
+        echo "List all files:"
+        git ls-files
 
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
