@@ -25,7 +25,7 @@ jobs:
     - name: Check manifests using kube-score
       uses: yokawasa/action-setup-kube-tools@v0.9.2
     - run: |
-        kube-score score manifests/best_effort.yaml
+        kube-score score manifests/not-k8.yaml
 
     - name: Get K8 Kind
       uses: 'mikefarah/yq@master'
@@ -66,9 +66,9 @@ jobs:
 
     - name: Update README
       run: |
-        git checkout -b new_branch_4
-        git branch --all
-        git branch --show-current
+        DATE=$(date +%Y-%m-%d-%H-%M-%S)
+        BRANCH_NAME="new_branch_$DATE"
+        git checkout -b $BRANCH_NAME
         echo " Ameenah is updating the content again and again and again " >> README.md
 
     - name: Commit changes
@@ -78,13 +78,13 @@ jobs:
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git push --set-upstream origin new_branch_4
+        git push --set-upstream origin $BRANCH_NAME
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Pull Request
       run: |
-        gh pr create --title "Pull request title" --body "Pull request body" --base main --head new_branch_4
+        gh pr create --title "Pull request title" --body "Pull request body" --base main --head $BRANCH_NAME
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
