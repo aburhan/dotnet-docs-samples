@@ -59,6 +59,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Setup Git config
+      run: |
+        git config --global user.email "ameenah.burhan@gmail.com"
+        git config --global user.name "aburhan"
+    
+    - name: Create and Checkout to new branch
+      run: |
+        BRANCH_NAME="new_branch_$RANDOM"
+        git checkout -b $BRANCH_NAME
+    
+    - name: Update file 
+      run: echo " Ameenah is updating the content again and again and again and again " >> README.md
+    
+    - name: Push new branch to remote
+      run: |
+        git push -u origin $BRANCH_NAME
+        
     - name: Update README
       run: |
         NEW_BRANCH_NAME="new_branch_$RANDOM"
@@ -69,8 +86,7 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --global user.email "ameenah.burhan@gmail.com"
-        git config --global user.name "aburhan"
+        
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
