@@ -54,16 +54,18 @@ jobs:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
   update_file:
     runs-on: ubuntu-latest
-    env:
-      Branch_name: feat-$(date +%Y%m%d)-$RANDOM
+  
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-
+   
     - name: Setup Git config
       run: |
         git config --global user.email "ameenah.burhan@gmail.com"
         git config --global user.name "aburhan"
+        export branch_name=feat-$(date +%Y%m%d)-$RANDOM
+      env:
+        Branch_name: $branch_name
     
     - name: Create and Checkout to new branch
       run: |
