@@ -67,6 +67,8 @@ jobs:
     - name: Create and Checkout to new branch
       run: |
         export UNIQUE="$RANDOM"
+        echo $RANDOM
+        echo "############MY RANDOM NUMBER########"
         git checkout -b my-branch$UNIQUE
     
     - name: Update file 
