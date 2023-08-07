@@ -61,9 +61,8 @@ jobs:
 
     - name: Update README
       run: |
-        export NAME=feature_$RANDOM
-        echo $NAME
-        git checkout -b $NAME
+        NEW_BRANCH_NAME="new_branch_$RANDOM"
+        git checkout -b $NEW_BRANCH_NAME
         git branch --all
         git branch --show-current
         echo " Ameenah is updating the content again and again and again " >> README.md
@@ -75,13 +74,13 @@ jobs:
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git push --set-upstream origin $NAME
+        git push --set-upstream origin $NEW_BRANCH_NAME
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Pull Request
       run: |
-        gh pr create --title "Pull request title" --body "Pull request body" --base main --head feature_$RANDOM
+        gh pr create --title "Pull request title" --body "Pull request body" --base main --head $NEW_BRANCH_NAME
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
