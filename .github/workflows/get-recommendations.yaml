@@ -63,7 +63,7 @@ jobs:
       run: |
         export NAME=feature_$RANDOM
         echo $NAME
-        git checkout -b feature_$RANDOM
+        git checkout -b $NAME
         git branch --all
         git branch --show-current
         echo " Ameenah is updating the content again and again and again " >> README.md
@@ -75,7 +75,7 @@ jobs:
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git push --set-upstream origin feature_$RANDOM
+        git push --set-upstream origin $NAME
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
