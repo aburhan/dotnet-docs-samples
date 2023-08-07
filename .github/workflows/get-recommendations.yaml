@@ -63,7 +63,7 @@ jobs:
       run: |
         git config --global user.email "ameenah.burhan@gmail.com"
         git config --global user.name "aburhan"
-        echo "branch_name=$(feat-$(date +%Y%m%d)-$RANDOM)" >> "$GITHUB_ENV"
+        echo "branch_name=feat-$(date +%Y%m%d)-$RANDOM" >> "$GITHUB_ENV"
     
     - name: Create and Checkout to new branch
       run: |
