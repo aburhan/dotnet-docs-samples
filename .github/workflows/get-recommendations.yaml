@@ -66,15 +66,15 @@ jobs:
     
     - name: Create and Checkout to new branch
       run: |
-        export BRANCH_NAME="new_branch_$RANDOM"
-        git checkout -b $BRANCH_NAME
+        git checkout -b my-branch
+        git pull
     
     - name: Update file 
       run: echo " Ameenah is updating the content again and again and again and again " >> README.md
     
     - name: Push new branch to remote
       run: |
-        git push -u origin $BRANCH_NAME
+        git push -u origin my-branch
         
     - name: Update README
       run: |
