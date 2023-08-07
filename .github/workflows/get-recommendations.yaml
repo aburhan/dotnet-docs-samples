@@ -66,7 +66,8 @@ jobs:
     
     - name: Create and Checkout to new branch
       run: |
-        git checkout -b my-branch
+        export UNIQUE="$RANDOM"
+        git checkout -b my-branch$UNIQUE
     
     - name: Update file 
       run: |
@@ -77,13 +78,13 @@ jobs:
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git push --set-upstream origin my-branch
+        git push --set-upstream origin my-branch$UNIQUE
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Pull Request
       run: |
-        gh pr create --title "Pull request title" --body "Pull request body" --base main --head my-branch
+        gh pr create --title "Pull request title" --body "Pull request body" --base main --head my-branch$UNIQUE
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
