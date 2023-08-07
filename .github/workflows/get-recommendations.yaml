@@ -67,16 +67,20 @@ jobs:
     - name: Create and Checkout to new branch
       run: |
         export UNIQUE="$RANDOM"
-        echo $RANDOM
+        echo $UNIQUE
         echo "############MY RANDOM NUMBER########"
         git checkout -b my-branch$UNIQUE
     
     - name: Update file 
       run: |
+        echo $UNIQUE
+        echo "############MY RANDOM NUMBER########"
         echo " Ameenah is updating the content again and again and again and again " >> README.md        
 
     - name: Push new branch to remote
       run: |
+        echo $UNIQUE
+        echo "############MY RANDOM NUMBER########"
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
