@@ -49,37 +49,39 @@ jobs:
        export CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'| jq -r '.[0].cpu_requested_recommendation')
        echo $CPU
     
-    #- name: Create feature branch
-     # uses: peterjgrainger/action-create-branch@v2.2.0
-      #env:
-       #GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
-      #with:
-      # branch: 'rightsize'
-       #sha: '${{ github.event.pull_request.head.sha }}'
-    - run: echo "Some changes" >> file-to-change.txt
-    
-    - uses: 'actions/checkout@v3'
-    - name: Commit files # transfer the new html files back into the repository
-      run: |
-        git config --local user.name "aburhan"
-        git add file-to-change.txt
-        git commit -m "Updating the repository GitHub html pages in the docs folder"
-    
-    - name: Push changes # push the output folder to your repo
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        force: true
+  # This is a basic workflow to help you get started with Actions
 
-    #- name: Checkout the feature branch
-     # run : |
-      #  git branch -a 
-       # git config --global user.email "ameenah.burhan@gmail.com"
-        #git config --global user.name "aburhan"
-        #git branch -a 
-        #git checkout -b rightsize
-        #ls
-        #cat manifests/pod.yaml
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  update_file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Update README
+      run: |
+        git checkout -b new_branch_4
+        git branch --all
+        git branch --show-current
+        echo " Ameenah is updating the content again and again and again " >> README.md
+
+    - name: Commit changes
+      run: |
+        git config --global user.email "ameenah.burhan@gmail.com"
+        git config --global user.name "aburhan"
+        git add README.md
+        git commit -m "Update README.md"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git push --set-upstream origin new_branch_4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Pull Request
+      run: |
+        gh pr create --title "Pull request title" --body "Pull request body" --base main --head new_branch_4
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     #- name: Get K8 Kind
      # uses: 'mikefarah/yq@master'
