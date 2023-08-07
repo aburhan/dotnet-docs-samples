@@ -66,31 +66,30 @@ jobs:
     
     - name: Create and Checkout to new branch
       run: |
-        export UNIQUE="$RANDOM"
-        echo $UNIQUE
-        echo "############MY RANDOM NUMBER########"
-        git checkout -b my-branch$UNIQUE
+        git checkout -b $BRANCH_NAME
+      env: 
+        BRANCH_NAME: "new_branch_$(date +%Y-%m-%d-%H-%M-%S)"
     
     - name: Update file 
       run: |
-        echo $UNIQUE
+        echo $BRANCH_NAME
         echo "############MY RANDOM NUMBER########"
         echo " Ameenah is updating the content again and again and again and again " >> README.md        
 
     - name: Push new branch to remote
       run: |
-        echo $UNIQUE
+        echo $BRANCH_NAME
         echo "############MY RANDOM NUMBER########"
         git add README.md
         git commit -m "Update README.md"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git push --set-upstream origin my-branch$UNIQUE
+        git push --set-upstream origin $BRANCH_NAME
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Pull Request
       run: |
-        gh pr create --title "Pull request title" --body "Pull request body" --base main --head my-branch$UNIQUE
+        gh pr create --title "Pull request title" --body "Pull request body" --base main --head $BRANCH_NAME
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
