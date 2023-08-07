@@ -67,7 +67,7 @@ jobs:
     - name: Update README
       run: |
         DATE=$(date +%Y-%m-%d-%H-%M-%S)
-        BRANCH_NAME="new_branch_$DATE"
+        BRANCH_NAME="feature_$DATE"
         git checkout -b $BRANCH_NAME
         echo " Ameenah is updating the content again and again and again " >> README.md
 
