@@ -6,7 +6,7 @@ on:
 env:
   PROJECT_ID: 'github-action-393418'
   PROJECT_NUMBER: '168241442549'
-  BRANCH_NAME: $(date +%Y%m%d)-$RANDOM
+  BRANCH_NAME: feat-$(date +%Y%m%d)-$RANDOM
   
 jobs:
   build:
