@@ -66,7 +66,7 @@ jobs:
     
     - name: Create and Checkout to new branch
       run: |
-        BRANCH_NAME="new_branch_$RANDOM"
+        export BRANCH_NAME="new_branch_$RANDOM"
         git checkout -b $BRANCH_NAME
     
     - name: Update file 
