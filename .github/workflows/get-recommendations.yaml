@@ -69,7 +69,7 @@ jobs:
         git checkout -b $BRANCH_NAME
         DATE=$(date +%Y-%m-%d-%H-%M-%S)
       env: 
-        BRANCH_NAME: "new_branch_$DATE"
+        BRANCH_NAME: new_branch_$DATE
     
     - name: Update file 
       run: |
