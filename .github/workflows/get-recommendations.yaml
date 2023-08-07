@@ -8,7 +8,7 @@ env:
   PROJECT_NUMBER: '168241442549'
   
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -22,11 +22,6 @@ jobs:
         echo "List all files:"
         git ls-files
 
-    - name: Get K8 Kind
-      uses: 'mikefarah/yq@master'
-      with:
-        #run: ./manifests/test-jq.sh
-        cmd: yq '.kind' "manifests/pod.yaml"
 
     #
     # Authenticate to Google Cloud using workload identity federation
@@ -40,21 +35,13 @@ jobs:
         
     - name: 'Set up Cloud SDK'
       uses: 'google-github-actions/setup-gcloud@v1'
-   
-        
-    - name: 'Get workload recommendation'
-      id: bigquery
-      run: |
-       bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'
-       export CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'| jq -r '.[0].cpu_requested_recommendation')
-       echo $CPU
     
   # This is a basic workflow to help you get started with Actions
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
   update_file:
+    needs: [setup]
     runs-on: ubuntu-latest
-  
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -73,7 +60,18 @@ jobs:
     - name: Update file 
       run: |
         echo " Ameenah is updating the content again and again and again and again " >> README.md        
-
+        
+   - name: Check manifest resources
+     run: |
+       
+       
+   # - name: 'Get workload recommendation'
+    #  id: bigquery
+     # run: |
+      # bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'
+       #export CPU=$(bq query --nouse_legacy_sql --format=json 'SELECT CAST(cpu_requested_recommendation AS INT64) AS cpu_requested_recommendation FROM `github-action-393418.data.container_recommendations` LIMIT 1'| jq -r '.[0].cpu_requested_recommendation')
+       #echo $CPU
+       
     - name: Push new branch to remote
       run: |
         git add README.md
