@@ -78,8 +78,9 @@ jobs:
         
     - name: Update README
       run: |
-        NEW_BRANCH_NAME="new_branch_$RANDOM"
+        NEW_BRANCH_NAME="new_branch"
         git checkout -b $NEW_BRANCH_NAME
+        git pull
         git branch --all
         git branch --show-current
         echo " Ameenah is updating the content again and again and again " >> README.md
