@@ -61,8 +61,8 @@ jobs:
 
     - name: Update README
       run: |
-        BRANCH_NAME = feature_$RANDOM
-        echo $BRANCH_NAME
+        export NAME=feature_$RANDOM
+        echo $NAME
         git checkout -b feature_$RANDOM
         git branch --all
         git branch --show-current
